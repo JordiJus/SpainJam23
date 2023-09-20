@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2194648368546669359}
   m_Layer: 1
   m_Name: Character
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,6 +51,7 @@ MonoBehaviour:
   currentHP: 10
   maxMana: 5
   currentMana: 5
+  PlayerCards: 000000000000000000000000
   defense: 0
 --- !u!1 &3790676820669508186
 GameObject:

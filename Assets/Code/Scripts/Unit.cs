@@ -16,11 +16,10 @@ public class Unit : MonoBehaviour
     public int maxMana;
     public int currentMana;
 
-    public Card[] AllCards;
+    public CardsSelected PlayerCards;
     
-
     public bool defense;
-    
+
     public bool takeDamage(int dmg)
     {
         if (defense){
