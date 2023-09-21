@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 public enum CardsTypes { FOOL, MAGICIAN, LOVERS, STRENGTH, DEATH, DEVIL, MOON, SUN }
 public enum BattleStates { START, PLAYERTURN, ENEMYTURN, WON, LOST }
+public enum ShipStations { NONE, CANNONS, CABIN, CELLAR, ARMORY, KITCHEN, INFIRMARY, STWHEEL, TOP }
 public class BattleSystem : MonoBehaviour {
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
@@ -38,11 +39,14 @@ public class BattleSystem : MonoBehaviour {
     TMP_Text button3Text;
 
     public CardsSelected cardsForPlayer;
+    public PlayerStats playerStats;
 
     public TMP_Text dialogue;
 
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
+
+    bool startMoon;
 
     void Start() {
         state = BattleStates.START;
@@ -55,6 +59,7 @@ public class BattleSystem : MonoBehaviour {
         GameObject playerGameObj = Instantiate(playerPrefab, playerPlace);
         playerUnit = playerGameObj.GetComponent<Unit>();
 
+        playerUnit.currentHP = playerStats.currentHP;
         playerUnit.PlayerCards = cardsForPlayer;
 
         // This has to be eliminated!!
@@ -107,15 +112,36 @@ public class BattleSystem : MonoBehaviour {
         yield return new WaitForSeconds(2f);
 
         state = BattleStates.PLAYERTURN;
+        startMoon = true;
 
-        PlayerTurn();
+        StartCoroutine(PlayerTurn());
 
     }
 
     // The logic behind the player's turn
-    void PlayerTurn() {
+    IEnumerator PlayerTurn() {
+        
+        if(startMoon) {
+            if(playerUnit.moonProtection){
+                dialogue.SetText("Due to The Moon, "+ playerUnit.unitName + " spends 1 mana.");
+                playerUnit.UseMana(1);
+                playerHUD.setMana(playerUnit.currentMana);
+                if(playerUnit.currentMana <= 0) {
+                    yield return new WaitForSeconds(1f);
+
+                    dialogue.SetText(playerUnit.unitName + " loses the protection of The Moon.");
+                    playerUnit.moonProtection = false;
+                }
+            }
+        }
+        
+        startMoon = true;
+
+        yield return new WaitForSeconds(1f);
+
         combatMenu.SetActive(true);
         skillsMenu.SetActive(false);
+
         dialogue.SetText("Choose an action");
     }
 
@@ -125,6 +151,7 @@ public class BattleSystem : MonoBehaviour {
         
         dialogue.SetText(playerUnit.unitName + " attacks!");
         combatMenu.SetActive(false);
+        skillsMenu.SetActive(false);
         
         StartCoroutine(PlayerAttack());
     }
@@ -135,6 +162,7 @@ public class BattleSystem : MonoBehaviour {
         
         dialogue.SetText(playerUnit.unitName + " defends!");
         combatMenu.SetActive(false);
+        skillsMenu.SetActive(false);
 
         StartCoroutine(PlayerDefend());
     }
@@ -194,31 +222,50 @@ public class BattleSystem : MonoBehaviour {
     }
 
     IEnumerator PlayerUseCard(CardsTypes card) {
-        bool canUse = button1Cards.UseCard(card);
-        if(canUse) {
+        yield return new WaitForSeconds(1f);
 
+        dialogue.SetText(playerUnit.unitName + " uses The " + Enum.GetName(typeof(CardsTypes), card));
+        bool canUse = button1Cards.UseCard(card);
+
+        if(canUse) {
+            
             playerHUD.setMana(playerUnit.currentMana);
             playerHUD.setHP(playerUnit.currentHP);
             enemyHUD.setHP(enemyUnit.currentHP);
 
             yield return new WaitForSeconds(1f);
-
-            StartCoroutine(EnemyTurn());
+            
+            if(enemyUnit.currentHP <= 0){
+                state = BattleStates.WON;
+                EndBattle();
+            } else {
+                state = BattleStates.ENEMYTURN;
+                StartCoroutine(EnemyTurn());
+            }
+            
         } else {
-            dialogue.SetText("Not enough mana!");
+            if (playerUnit.moonProtection == true) {
+                dialogue.SetText("The Moon already active!");
+                startMoon = false;
+            } else if (playerUnit.canDefend == false) {
+                dialogue.SetText("The Devil already active!");
+            } else {
+                dialogue.SetText("Not enough mana!");
+            }
+            
 
             yield return new WaitForSeconds(1f);
 
-            PlayerTurn();
+            StartCoroutine(PlayerTurn());
         }
         
 
     }
 
     IEnumerator PlayerAttack() {   
-        bool isDead = enemyUnit.takeDamage(playerUnit.damage);
+        bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
         enemyHUD.setHP(enemyUnit.currentHP);
-        playerUnit.recoverMana(1);
+        playerUnit.RecoverMana(1);
         playerHUD.setMana(playerUnit.currentMana);
 
         yield return new WaitForSeconds(1f);
@@ -233,16 +280,22 @@ public class BattleSystem : MonoBehaviour {
     }
 
     IEnumerator PlayerDefend() {   
-        playerUnit.unitDefend();
-        playerUnit.recoverMana(2);
+        bool canDefend = playerUnit.UnitDefend();
+        
         playerHUD.setMana(playerUnit.currentMana);
-
-
 
         yield return new WaitForSeconds(1f);
 
-        state = BattleStates.ENEMYTURN;
-        StartCoroutine(EnemyTurn());
+        if (canDefend) {
+            state = BattleStates.ENEMYTURN;
+            StartCoroutine(EnemyTurn());
+        } else {
+            dialogue.SetText("Due to the Devil " + playerUnit.unitName + " can't defend!");
+
+            yield return new WaitForSeconds(1f);
+            combatMenu.SetActive(true);
+        }
+        
         
     }
 
@@ -253,7 +306,7 @@ public class BattleSystem : MonoBehaviour {
 
         yield return new WaitForSeconds(1);
 
-        bool isDead = playerUnit.takeDamage(enemyUnit.damage);
+        bool isDead = playerUnit.TakeDamage(enemyUnit.damage);
 
         playerHUD.setHP(playerUnit.currentHP);
 
@@ -264,18 +317,18 @@ public class BattleSystem : MonoBehaviour {
             EndBattle();
         } else {
             state = BattleStates.PLAYERTURN;
-            PlayerTurn();
+            StartCoroutine(PlayerTurn());
         }
-
     }
 
     void EndBattle() {
+        playerStats.currentHP = playerUnit.currentHP;
         if (state == BattleStates.WON) {
             dialogue.SetText("You won the battle!");
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(2);
         } else if (state == BattleStates.LOST) {
             dialogue.SetText("You were defeated!");
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(0);
         }
     }
 

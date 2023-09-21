@@ -49,18 +49,30 @@ public class CardSelection : MonoBehaviour
         text1.SetText("");
         text2.SetText("");
         randomCard1 = Random.Range(0, 8);
-        while(listOfCards.Contains<int>(randomCard1)){
+        if(!listOfCards.Contains<int>(randomCard1)) {
+            listOfCards.Add(randomCard1);
+        } else {
+            while(listOfCards.Contains<int>(randomCard1)){
                 randomCard1 = Random.Range(0, 8);
+            }
+            listOfCards.Add(randomCard1);
         }
+        
         randomCard2 = Random.Range(0, 8);
-        while(listOfCards.Contains<int>(randomCard2)){
+        if(!listOfCards.Contains<int>(randomCard2)){
+            listOfCards.Add(randomCard2);
+        } else {
+            while(listOfCards.Contains<int>(randomCard2)){
                 randomCard2 = Random.Range(0, 8);
+            }
+            listOfCards.Add(randomCard2);
         }
-        listOfCards.Add(randomCard1);
-        listOfCards.Add(randomCard2);
+        
+        
+        
 
-        image1 = CreateImageCard(randomCard1,card1);
-        image2 = CreateImageCard(randomCard2,card2);
+        image1 = CreateImageCard(randomCard1,card1, text1);
+        image2 = CreateImageCard(randomCard2,card2, text2);
 
     }
 
@@ -112,23 +124,30 @@ public class CardSelection : MonoBehaviour
         StartCoroutine(CardChoice(randomCard2));
     }
 
-    public GameObject CreateImageCard(int card, Transform cardPlace){
+    public GameObject CreateImageCard(int card, Transform cardPlace, TMP_Text text){
         if(card == 0){
-            text1.SetText("The Fool - Cost: 0 Mana\nThis card give a random effect. Four positive and one negative.");
+            text.SetText("The Fool - Cost: 0 Mana\nOnly 1 Use\n\nThis card give a random effect. Three powerful positive ones and two negatives.");
             return Instantiate(Fool, cardPlace);
         } else if (card == 1) {
+            text.SetText("Magician - Cost: 0 Mana\n\nYou recover all your mana upon use.");
             return Instantiate(Magician, cardPlace);
         } else if (card == 2) {
+            text.SetText("Lovers - Cost: 2 Mana\n\nYou recover 4 health with this card.");
             return Instantiate(Lovers, cardPlace);
         } else if (card == 3) {
+            text.SetText("Strength - Cost: 3 Mana\n\nYou gain +1 to your damage.");
             return Instantiate(Strength, cardPlace);
         } else if (card == 4) {
+            text.SetText("Death - Cost: 5 Mana\n\nYou deal 5 damage to your enemy.");
             return Instantiate(Death, cardPlace);
         } else if (card == 5) {
+            text.SetText("The Devil - Cost: 3 Mana\nOnly 1 Use\n\nYou gain +2 to your damage but you cannot defend for the rest of the combat.");
             return Instantiate(Devil, cardPlace);
         } else if (card == 6) {
+            text.SetText("The Moon - Cost: 1 Mana/Turn\n\n-1 to incoming damage until you run out of mana. Cannot be deactivated.");
             return Instantiate(Moon, cardPlace);
         } else {
+            text.SetText("The Sun - Cost: 4 Mana\n\nYou deal 3 damage and heal 2 of your health.");
             return Instantiate(Sun, cardPlace);
         }
     }

@@ -13,18 +13,54 @@ public class Cards : MonoBehaviour
 
     }
     public bool UseCard(CardsTypes card) {
-        if(card == CardsTypes.MAGICIAN) {
-            playerUnit.recoverMana(5);
-            //playerUnit.recoverMana(5);
-        } else if (card == CardsTypes.SUN) {
+        
+        if (card == CardsTypes.FOOL) {
+            int random = Random.Range(0,5);
+            if (random == 0) {
+                int dmg = Mathf.CeilToInt(enemyUnit.currentHP/2);
+                enemyUnit.TakeDamage(dmg);
+            } else if (random == 1) {
+                playerUnit.RecoverLife(Mathf.CeilToInt(playerUnit.maxHP/2));
+            } else if (random == 2) {
+                playerUnit.ModifyStrength(3);
+            } else if (random == 3) {
+                playerUnit.ModifyStrength(-1);
+            } else if (random == 4) {
+                playerUnit.TakeDamage(Mathf.FloorToInt(playerUnit.currentHP/2));
+            }
+        } else if(card == CardsTypes.MAGICIAN) {
+            playerUnit.RecoverMana(5);
+        } else if (card == CardsTypes.LOVERS){
+            playerUnit.UseMana(2);
+            playerUnit.RecoverLife(4);
+        } else if (card == CardsTypes.DEATH) {
             if (playerUnit.currentMana < 5){
                 return false;
             } else {
-                playerUnit.useMana(5);
-                enemyUnit.takeDamage(5);
-
-                
+                playerUnit.UseMana(5);
+                enemyUnit.TakeDamage(5);
             }
+        } else if (card == CardsTypes.STRENGTH) {
+            playerUnit.UseMana(3);
+            playerUnit.ModifyStrength(1);
+            
+        } else if (card == CardsTypes.DEVIL) {
+            if (playerUnit.canDefend) {
+                playerUnit.UseMana(3);
+                playerUnit.ModifyStrength(2);
+                playerUnit.canDefend = false;
+            } else {
+                return false;
+            }
+        } else if (card == CardsTypes.MOON) {
+            if (playerUnit.moonProtection == true) {
+                return false;
+            }
+            playerUnit.moonProtection = true;
+        } else if (card == CardsTypes.SUN) {
+            playerUnit.UseMana(4);
+            enemyUnit.TakeDamage(3);
+            playerUnit.RecoverLife(2);
         } else {
             return false;
         }
