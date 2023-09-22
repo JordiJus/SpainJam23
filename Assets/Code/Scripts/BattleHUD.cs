@@ -19,23 +19,23 @@ public class BattleHUD : MonoBehaviour
         nameText.SetText(unit.unitName);
         hpBar.maxValue = unit.maxHP;
         hpBar.value = unit.currentHP;
-        hpNum.SetText(unit.currentHP + " / " + unit.maxHP);
+        hpNum.SetText(unit.currentHP.ToString());
 
         manaBar.maxValue = unit.maxMana;
         manaBar.value = unit.currentMana;
-        manaNum.SetText(unit.currentMana + " / " + unit.maxMana);
+        manaNum.SetText(unit.currentMana.ToString());
 
     }
 
     public void setHP(int hp)
     {
         hpBar.value = hp;
-        hpNum.SetText(hpBar.value + " / " + hpBar.maxValue);
+        hpNum.SetText(hpBar.value.ToString());
     }
 
     public void setMana(int mana)
     {
         manaBar.value = mana;
-        manaNum.SetText(manaBar.value + " / " + manaBar.maxValue);
+        manaNum.SetText(manaBar.value.ToString());
     }
 }
