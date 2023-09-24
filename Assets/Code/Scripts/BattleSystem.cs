@@ -40,6 +40,7 @@ public class BattleSystem : MonoBehaviour {
 
     public CardsSelected cardsForPlayer;
     public PlayerStats playerStats;
+    public EnemyManager enemyManager;
 
     public TMP_Text dialogue;
 
@@ -56,17 +57,26 @@ public class BattleSystem : MonoBehaviour {
     // This initiates the battle
 
     IEnumerator SetupBattle() {
+
+        combatMenu.SetActive(false);
+        skillsMenu.SetActive(false);
+
         GameObject playerGameObj = Instantiate(playerPrefab, playerPlace);
         playerUnit = playerGameObj.GetComponent<Unit>();
 
+        playerUnit.maxHP = playerStats.maxHP;
         playerUnit.currentHP = playerStats.currentHP;
         playerUnit.PlayerCards = cardsForPlayer;
+
+        playerUnit.damage = playerStats.damage;
+        playerUnit.maxMana = playerStats.mana;
+        playerUnit.currentMana = playerStats.mana;
 
         // This has to be eliminated!!
         // playerUnit.PlayerCards.card1 = CardsTypes.MAGICIAN;
         // playerUnit.PlayerCards.card2 = CardsTypes.SUN;
 
-        GameObject enemyGameObj = Instantiate(enemyPrefab, enemyPlace);
+        GameObject enemyGameObj = enemyManager.CreateEnemy(enemyPlace, playerStats.currentTile);;
         enemyUnit =  enemyGameObj.GetComponent<Unit>();
 
         dialogue.SetText("The Battle Begins!");
@@ -244,10 +254,10 @@ public class BattleSystem : MonoBehaviour {
             }
             
         } else {
-            if (playerUnit.moonProtection == true) {
+            if (playerUnit.moonProtection == true && playerUnit.currentMana > 0) {
                 dialogue.SetText("The Moon already active!");
                 startMoon = false;
-            } else if (playerUnit.canDefend == false) {
+            } else if (playerUnit.canDefend == false && playerUnit.currentMana >= 3) {
                 dialogue.SetText("The Devil already active!");
             } else {
                 dialogue.SetText("Not enough mana!");
@@ -302,13 +312,27 @@ public class BattleSystem : MonoBehaviour {
 
     // Enemy's turn
     IEnumerator EnemyTurn() {
+        if(playerStats.station1 == ShipStations.CANNONS || playerStats.station2 == ShipStations.CANNONS || playerStats.station3 == ShipStations.CANNONS) {
+            dialogue.SetText("Cannons make 1 damage to enemy");
+
+            bool isCannonDead = enemyUnit.TakeDamage(1);
+            enemyHUD.setHP(enemyUnit.currentHP);
+
+            yield return new WaitForSeconds(1);
+            
+            if (isCannonDead) {
+                state = BattleStates.WON;
+                EndBattle();
+            }
+        } 
         dialogue.SetText("Enemy attacks!");
 
         yield return new WaitForSeconds(1);
 
-        bool isDead = playerUnit.TakeDamage(enemyUnit.damage);
+        bool isDead= enemyManager.IAEnemy(playerUnit, enemyUnit, playerStats.currentTile);
 
         playerHUD.setHP(playerUnit.currentHP);
+        enemyHUD.setHP(enemyUnit.currentHP);
 
         yield return new WaitForSeconds(1);
 
@@ -318,17 +342,31 @@ public class BattleSystem : MonoBehaviour {
         } else {
             state = BattleStates.PLAYERTURN;
             StartCoroutine(PlayerTurn());
+        
         }
+        
     }
 
     void EndBattle() {
         playerStats.currentHP = playerUnit.currentHP;
         if (state == BattleStates.WON) {
             dialogue.SetText("You won the battle!");
-            SceneManager.LoadScene(2);
+            if(playerStats.currentTile == 4) {
+                playerStats.isPenguDead = true;
+            } else if(playerStats.currentTile == 5) {
+                playerStats.isDuckDead = true;
+            } else if(playerStats.currentTile == 6) {
+                playerStats.isRaccDead = true;
+            }
+
+            if(playerStats.isPenguDead && playerStats.isDuckDead && playerStats.isRaccDead) {
+                SceneManager.LoadScene(7);
+            } else {
+                SceneManager.LoadScene(2);
+            }
         } else if (state == BattleStates.LOST) {
             dialogue.SetText("You were defeated!");
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(6);
         }
     }
 

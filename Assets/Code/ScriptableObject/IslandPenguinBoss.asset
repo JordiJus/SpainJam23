@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 372ccc2c9c307df449f8c7957028d999, type: 3}
+  m_Name: IslandPenguinBoss
+  m_EditorClassIdentifier: 
+  tiles:
+  - {fileID: 11400000, guid: caa36cf944da3044e844bb1b97a27485, type: 2}
+  - {fileID: 11400000, guid: 39ff10dcd8c832449b35b8bb6575dfa8, type: 2}
+  - {fileID: 11400000, guid: 25b31192c82483644b69adbed6b91af9, type: 2}
+  - {fileID: 11400000, guid: b1054542ee004ed48ab59610c2b397a0, type: 2}
+  - {fileID: 11400000, guid: 362bcdf9226593a4dbb60a60a16837a2, type: 2}
+  - {fileID: 11400000, guid: 06a002e60e7f2eb4097e4ed931be4fe4, type: 2}
+  - {fileID: 11400000, guid: bfa6760ee72da564dbfaeb77468dbca4, type: 2}
+  - {fileID: 11400000, guid: c9199574362cc3148b74fbb84353e8c2, type: 2}
+  - {fileID: 11400000, guid: fee476c6d91e269429e88ccca4700f97, type: 2}
+  islandSize: 4

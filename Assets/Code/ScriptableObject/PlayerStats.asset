@@ -12,7 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed6a5956ef613ba488cfef493abaa9b4, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
+  maxHP: 10
   currentHP: 10
-  station1: 6
-  station2: 5
+  damage: 2
+  mana: 5
+  posShipX: 0.5
+  posShipY: 0.5
+  movements: 8
+  supplies: 50
+  isPenguDead: 0
+  isDuckDead: 0
+  isRaccDead: 0
+  currentTile: 6
+  station1: 4
+  station2: 1
   station3: 3

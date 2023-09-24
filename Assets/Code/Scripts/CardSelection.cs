@@ -106,7 +106,7 @@ public class CardSelection : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
 
-            SceneManager.LoadScene(5);
+            SceneManager.LoadScene(4);
         }
     }
 
@@ -126,7 +126,7 @@ public class CardSelection : MonoBehaviour
 
     public GameObject CreateImageCard(int card, Transform cardPlace, TMP_Text text){
         if(card == 0){
-            text.SetText("The Fool - Cost: 0 Mana\nOnly 1 Use\n\nThis card give a random effect. Three powerful positive ones and two negatives.");
+            text.SetText("The Fool - Cost: 0 Mana\n\nThis card give a random effect. Three powerful positive ones and two negatives.");
             return Instantiate(Fool, cardPlace);
         } else if (card == 1) {
             text.SetText("Magician - Cost: 0 Mana\n\nYou recover all your mana upon use.");

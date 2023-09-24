@@ -35,6 +35,11 @@ public class ShipSystem : MonoBehaviour
         playerStats.station2 = ShipStations.NONE;
         playerStats.station3 = ShipStations.NONE;
 
+        playerStats.maxHP = 10;
+        if (playerStats.currentHP > 10) { playerStats.currentHP = 10; }
+        playerStats.damage = 2;
+        playerStats.mana = 5;
+
         dialogue.SetText("Place the 3 sailors in any station");
     }
 
@@ -59,6 +64,9 @@ public class ShipSystem : MonoBehaviour
     public IEnumerator GoToCards(){
         if(playerStats.station1 != ShipStations.NONE && playerStats.station2 != ShipStations.NONE && playerStats.station3 != ShipStations.NONE){
             yield return new WaitForSeconds(1f);
+            StationWorking(playerStats.station1);
+            StationWorking(playerStats.station2);
+            StationWorking(playerStats.station3);
             SceneManager.LoadScene(3);
         } else {
             dialogue.SetText("You have to place all sailors before sailing.");
@@ -143,4 +151,16 @@ public class ShipSystem : MonoBehaviour
         }
     }
 
+    public void StationWorking(ShipStations station){
+        if (station == ShipStations.INFIRMARY) {
+            playerStats.currentHP = 10;
+        } else if (station == ShipStations.CELLAR) {
+            playerStats.maxHP += 4;
+            playerStats.currentHP += 4;
+        } else if (station == ShipStations.ARMORY) {
+            playerStats.damage += 1;
+        } else if (station == ShipStations.KITCHEN) {
+            playerStats.mana = 7;
+        }
+    }
 }

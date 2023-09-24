@@ -31,8 +31,13 @@ public class Cards : MonoBehaviour
         } else if(card == CardsTypes.MAGICIAN) {
             playerUnit.RecoverMana(5);
         } else if (card == CardsTypes.LOVERS){
-            playerUnit.UseMana(2);
+            if (playerUnit.currentMana < 2){
+                return false;
+            } else {
+                playerUnit.UseMana(2);
             playerUnit.RecoverLife(4);
+            }
+            
         } else if (card == CardsTypes.DEATH) {
             if (playerUnit.currentMana < 5){
                 return false;
@@ -41,14 +46,22 @@ public class Cards : MonoBehaviour
                 enemyUnit.TakeDamage(5);
             }
         } else if (card == CardsTypes.STRENGTH) {
-            playerUnit.UseMana(3);
-            playerUnit.ModifyStrength(1);
+            if (playerUnit.currentMana < 3){
+                return false;
+            } else {
+                playerUnit.UseMana(3);
+                playerUnit.ModifyStrength(1);
+            }
             
         } else if (card == CardsTypes.DEVIL) {
             if (playerUnit.canDefend) {
-                playerUnit.UseMana(3);
-                playerUnit.ModifyStrength(2);
-                playerUnit.canDefend = false;
+                if (playerUnit.currentMana < 3){
+                    return false;
+                } else {
+                    playerUnit.UseMana(3);
+                    playerUnit.ModifyStrength(2);
+                    playerUnit.canDefend = false;
+                }
             } else {
                 return false;
             }
@@ -58,9 +71,14 @@ public class Cards : MonoBehaviour
             }
             playerUnit.moonProtection = true;
         } else if (card == CardsTypes.SUN) {
-            playerUnit.UseMana(4);
-            enemyUnit.TakeDamage(3);
-            playerUnit.RecoverLife(2);
+            if (playerUnit.currentMana < 4) {
+                return false;
+            } else {
+                playerUnit.UseMana(4);
+                enemyUnit.TakeDamage(3);
+                playerUnit.RecoverLife(2);
+            }
+            
         } else {
             return false;
         }

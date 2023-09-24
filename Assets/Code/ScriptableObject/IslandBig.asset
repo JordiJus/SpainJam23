@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 372ccc2c9c307df449f8c7957028d999, type: 3}
+  m_Name: IslandBig
+  m_EditorClassIdentifier: 
+  tiles:
+  - {fileID: 11400000, guid: ee748ad5cc6777b4590e2ab3fbbb50c8, type: 2}
+  - {fileID: 11400000, guid: 996ce4ba8a779734e883bd3b346fdf2e, type: 2}
+  - {fileID: 11400000, guid: 25d619d09be31e344854e4cd2b3b52fb, type: 2}
+  - {fileID: 11400000, guid: 55a476ff26f81f442b2be6cd9b95ce3c, type: 2}
+  - {fileID: 11400000, guid: 3d621c0a853d0da4792381f3f732edc9, type: 2}
+  - {fileID: 11400000, guid: b0b6f64fdba255d47aa2213a24f4b641, type: 2}
+  - {fileID: 11400000, guid: 48cb8f4c5bc5c0f4bb6bd7a9240c8cf4, type: 2}
+  - {fileID: 11400000, guid: 8f39903427f6ffc43a45ec59fad23615, type: 2}
+  - {fileID: 11400000, guid: a6eede8d6cf4af9469ee75eaa461355d, type: 2}
+  - {fileID: 11400000, guid: d37755c353282e14481883e21db957f7, type: 2}
+  - {fileID: 11400000, guid: c7233d14657fb324ea10f02fcd1e2858, type: 2}
+  - {fileID: 11400000, guid: 93810d4ec899f3042b1db1337ddd020e, type: 2}
+  islandSize: 3
