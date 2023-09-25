@@ -22,9 +22,13 @@ public class Unit : MonoBehaviour
     public bool defense;
     public bool canDefend = true; 
     public bool moonProtection = false;
+    public bool canUseFool = true;
+
+    public AudioSource hittingAudio;
 
     public bool TakeDamage(int dmg)
     {
+        hittingAudio.Play();
         if (defense){
             dmg = Mathf.FloorToInt(dmg/2);
             defense = false;

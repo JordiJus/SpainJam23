@@ -12,7 +12,7 @@ public class ShipSystem : MonoBehaviour
 {
 
     public TMP_Text dialogue;
-    public PlayerStats playerStats;
+    private PlayerStats playerStats;
 
     public GameObject crew1;
     public GameObject crew2;
@@ -31,6 +31,8 @@ public class ShipSystem : MonoBehaviour
     public Transform crew3Initial;
 
     void Start(){
+        playerStats = FindObjectOfType<PlayerStats>();
+        
         playerStats.station1 = ShipStations.NONE;
         playerStats.station2 = ShipStations.NONE;
         playerStats.station3 = ShipStations.NONE;

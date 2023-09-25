@@ -9,17 +9,20 @@ using UnityEngine.Windows;
 
 public class IntroSceneManager : MonoBehaviour
 {
+    private PlayerStats playerStats;
+    
     public GameObject vin1;
     public GameObject vin2;
     public GameObject vin3;
     public GameObject vin4;
 
     private int counter;
-    public PlayerStats playerStats;
 
     public TMP_Text dialogue;
 
     public void Start(){
+        playerStats = FindObjectOfType<PlayerStats>();
+
         playerStats.maxHP = 10;
         playerStats.currentHP = 10;
         playerStats.damage = 2;

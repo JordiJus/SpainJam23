@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class CardSelection : MonoBehaviour
 {   
     int numOfCards = 0;
-    public CardsSelected cardsSelected;
+    private CardsSelected cardsSelected;
 
     public Transform card1;
     public Transform card2;
@@ -32,6 +32,8 @@ public class CardSelection : MonoBehaviour
 
     public TMP_Text text1;
     public TMP_Text text2;
+    
+    public AudioSource audioClick;
 
     List<int> listOfCards = new List<int>();
     int randomCard1;
@@ -39,6 +41,9 @@ public class CardSelection : MonoBehaviour
     
 
     void Start(){
+        
+        cardsSelected = FindObjectOfType<CardsSelected>();
+
         but1.SetActive(true);
         but2.SetActive(true);
 
@@ -111,14 +116,14 @@ public class CardSelection : MonoBehaviour
     }
 
     public void OnButton1(){
-        Debug.Log("Click");
+        audioClick.Play();
         but1.SetActive(false);
         but2.SetActive(false);
         StartCoroutine(CardChoice(randomCard1));
     }
 
     public void OnButton2(){
-        Debug.Log("Click");
+        audioClick.Play();
         but1.SetActive(false);
         but2.SetActive(false);
         StartCoroutine(CardChoice(randomCard2));
@@ -126,7 +131,7 @@ public class CardSelection : MonoBehaviour
 
     public GameObject CreateImageCard(int card, Transform cardPlace, TMP_Text text){
         if(card == 0){
-            text.SetText("The Fool - Cost: 0 Mana\n\nThis card give a random effect. Three powerful positive ones and two negatives.");
+            text.SetText("The Fool - Only 1 use\n\nThis card give a random effect. Three powerful positive ones and two negatives.");
             return Instantiate(Fool, cardPlace);
         } else if (card == 1) {
             text.SetText("Magician - Cost: 0 Mana\n\nYou recover all your mana upon use.");

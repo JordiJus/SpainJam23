@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    public PlayerStats playerStats;
+    private PlayerStats playerStats;
 
     public GameObject penguinBossPrefab;
     public GameObject duckBossPrefab;
@@ -12,6 +12,10 @@ public class EnemyManager : MonoBehaviour
     public GameObject ghostPrefab;
     public GameObject slimePrefab;
     public GameObject skeletonPrefab;
+
+    public void Start() {
+        playerStats = FindObjectOfType<PlayerStats>();
+    }
 
     public GameObject CreateEnemy(Transform enemyPlace, int islandSize){
         if(islandSize == 4) {

@@ -38,8 +38,8 @@ public class BattleSystem : MonoBehaviour {
     TMP_Text button2Text;
     TMP_Text button3Text;
 
-    public CardsSelected cardsForPlayer;
-    public PlayerStats playerStats;
+    private CardsSelected cardsSelected;
+    private PlayerStats playerStats;
     public EnemyManager enemyManager;
 
     public TMP_Text dialogue;
@@ -47,9 +47,18 @@ public class BattleSystem : MonoBehaviour {
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
 
+    public AudioSource skillAudio;
+    public AudioSource defendAudio;
+    private GameObject mainTheme;
+
     bool startMoon;
 
     void Start() {
+
+        cardsSelected = FindObjectOfType<CardsSelected>();
+        playerStats = FindObjectOfType<PlayerStats>();
+        mainTheme = GameObject.FindWithTag("GameMusic");
+        Destroy(mainTheme);
         state = BattleStates.START;
         StartCoroutine(SetupBattle());
     }
@@ -66,7 +75,7 @@ public class BattleSystem : MonoBehaviour {
 
         playerUnit.maxHP = playerStats.maxHP;
         playerUnit.currentHP = playerStats.currentHP;
-        playerUnit.PlayerCards = cardsForPlayer;
+        playerUnit.PlayerCards = cardsSelected;
 
         playerUnit.damage = playerStats.damage;
         playerUnit.maxMana = playerStats.mana;
@@ -238,7 +247,8 @@ public class BattleSystem : MonoBehaviour {
         bool canUse = button1Cards.UseCard(card);
 
         if(canUse) {
-            
+            skillAudio.Play();
+
             playerHUD.setMana(playerUnit.currentMana);
             playerHUD.setHP(playerUnit.currentHP);
             enemyHUD.setHP(enemyUnit.currentHP);
@@ -254,11 +264,13 @@ public class BattleSystem : MonoBehaviour {
             }
             
         } else {
-            if (playerUnit.moonProtection == true && playerUnit.currentMana > 0) {
+            if ( card == CardsTypes.MOON&& playerUnit.moonProtection == true && playerUnit.currentMana > 0) {
                 dialogue.SetText("The Moon already active!");
                 startMoon = false;
-            } else if (playerUnit.canDefend == false && playerUnit.currentMana >= 3) {
+            } else if ( card == CardsTypes.DEVIL && playerUnit.canDefend == false && playerUnit.currentMana >= 3) {
                 dialogue.SetText("The Devil already active!");
+            } else if (card == CardsTypes.FOOL && playerUnit.canUseFool == false){
+                dialogue.SetText("The Fool has already been used!");
             } else {
                 dialogue.SetText("Not enough mana!");
             }
@@ -291,6 +303,7 @@ public class BattleSystem : MonoBehaviour {
 
     IEnumerator PlayerDefend() {   
         bool canDefend = playerUnit.UnitDefend();
+        defendAudio.Play();
         
         playerHUD.setMana(playerUnit.currentMana);
 

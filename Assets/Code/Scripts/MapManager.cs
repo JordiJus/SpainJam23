@@ -17,12 +17,13 @@ public class MapManager : MonoBehaviour
 
     public Transform ship;
 
-    
-    public PlayerStats playerStats;
+    private PlayerStats playerStats;
 
     private int islandSize;
 
-    
+    private void Start(){
+        playerStats = FindObjectOfType<PlayerStats>();
+    }
 
 
     private void Update(){
@@ -42,9 +43,7 @@ public class MapManager : MonoBehaviour
 
             playerStats.posShipX = ship.transform.position.x;
             playerStats.posShipY = ship.transform.position.y;
-
             
-
             if (playerStats.supplies <= 0) {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(6);
             } else {

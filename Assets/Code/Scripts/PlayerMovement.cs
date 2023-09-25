@@ -9,11 +9,12 @@ public class PlayerMovement : MonoBehaviour
 {
     float yPos;
     float xPos;
-    public PlayerStats playerStats;
+    private PlayerStats playerStats;
     public TMP_Text dialogue;
     public TMP_Text suppliesText;
 
     public void Start(){
+        playerStats = FindObjectOfType<PlayerStats>();
         if(playerStats.station1 == ShipStations.STWHEEL || playerStats.station2 == ShipStations.STWHEEL || playerStats.station3 == ShipStations.STWHEEL) {
             playerStats.movements = 12;
         } else {

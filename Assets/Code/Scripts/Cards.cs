@@ -15,18 +15,23 @@ public class Cards : MonoBehaviour
     public bool UseCard(CardsTypes card) {
         
         if (card == CardsTypes.FOOL) {
-            int random = Random.Range(0,5);
-            if (random == 0) {
-                int dmg = Mathf.CeilToInt(enemyUnit.currentHP/2);
-                enemyUnit.TakeDamage(dmg);
-            } else if (random == 1) {
-                playerUnit.RecoverLife(Mathf.CeilToInt(playerUnit.maxHP/2));
-            } else if (random == 2) {
-                playerUnit.ModifyStrength(3);
-            } else if (random == 3) {
-                playerUnit.ModifyStrength(-1);
-            } else if (random == 4) {
-                playerUnit.TakeDamage(Mathf.FloorToInt(playerUnit.currentHP/2));
+            if(playerUnit.canUseFool == true) {
+                int random = Random.Range(0,5);
+                if (random == 0) {
+                    int dmg = Mathf.CeilToInt(enemyUnit.currentHP/2);
+                    enemyUnit.TakeDamage(dmg);
+                } else if (random == 1) {
+                    playerUnit.RecoverLife(Mathf.CeilToInt(playerUnit.maxHP/2));
+                } else if (random == 2) {
+                    playerUnit.ModifyStrength(3);
+                } else if (random == 3) {
+                    playerUnit.ModifyStrength(-1);
+                } else if (random == 4) {
+                    playerUnit.TakeDamage(Mathf.FloorToInt(playerUnit.currentHP/2));
+                }
+                playerUnit.canUseFool = false;
+            } else {
+                return false;
             }
         } else if(card == CardsTypes.MAGICIAN) {
             playerUnit.RecoverMana(5);

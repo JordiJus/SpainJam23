@@ -8,6 +8,11 @@ public class GameOverSceneSystem : MonoBehaviour
 {
     // Start is called before the first frame update
     public Button but;
+    private GameObject outroSound;
+    public void Start(){
+        outroSound = GameObject.FindWithTag("GameMusic");
+        Destroy(outroSound);
+    }
 
     public void OnClickBut(){
         SceneManager.LoadScene(0);

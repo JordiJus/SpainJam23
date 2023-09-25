@@ -5,10 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-    public PlayerStats playerStats;
-    void Start(){
-        playerStats.currentHP = playerStats.maxHP;
-    }
     // Called when we click the "Play" button.
     public void OnPlayButton ()
     {
